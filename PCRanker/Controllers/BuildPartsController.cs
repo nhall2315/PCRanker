@@ -13,9 +13,9 @@ namespace PCRanker.Controllers
     [ApiController]
     public class BuildPartsController : ControllerBase
     {
-        private readonly BuildPartContext _context;
+        private readonly PCRankerContext _context;
 
-        public BuildPartsController(BuildPartContext context)
+        public BuildPartsController(PCRankerContext context)
         {
             _context = context;
         }

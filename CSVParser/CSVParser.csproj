@@ -6,7 +6,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\PCRanker\Controllers\BuildPartsController.cs" Link="Links\Controllers\BuildPartsController.cs" />
+    <Compile Include="..\PCRanker\Controllers\BuildsController.cs" Link="Links\Controllers\BuildsController.cs" />
+    <Compile Include="..\PCRanker\Controllers\PartsController.cs" Link="Links\Controllers\PartsController.cs" />
+    <Compile Include="..\PCRanker\Controllers\PartTypesController.cs" Link="Links\Controllers\PartTypesController.cs" />
+    <Compile Include="..\PCRanker\Models\Context.cs" Link="Links\Models\Context.cs" />
+    <Compile Include="..\PCRanker\Models\Models.cs" Link="Links\Models\Models.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="15.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Links\Controllers\" />
+    <Folder Include="Links\Models\" />
   </ItemGroup>
 
 </Project>

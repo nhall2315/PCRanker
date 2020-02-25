@@ -1,37 +1,44 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PCRanker.Models
 {
-    public class BuildContext : DbContext
+    public class PCRankerContext : DbContext
     {
-        public BuildContext(DbContextOptions<BuildContext> options)
+        public PCRankerContext(DbContextOptions<PCRankerContext> options)
             : base(options)
         {
         }
+        public PCRankerContext()
+        {
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PartPartType>()
+                .HasKey(ppt => new { ppt.PartID, ppt.PartTypeID });
+            modelBuilder.Entity<PartPartType>()
+                .HasOne(ppt => ppt.Part)
+                .WithMany(p => p.PartPartType)
+                .HasForeignKey(ppt => ppt.PartID);
+            modelBuilder.Entity<PartPartType>()
+                .HasOne(ppt => ppt.PartType)
+                .WithMany(pt => pt.PartPartType)
+                .HasForeignKey(ppt => ppt.PartTypeID);
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=.\\;Database=PCRanker;Trusted_Connection=True;");
+            }
+        }
+
         public DbSet<Build> Builds { get; set; }
-    }
-    public class BuildPartContext : DbContext
-    {
-        public BuildPartContext(DbContextOptions<BuildPartContext> options)
-            : base(options)
-        {
-        }
         public DbSet<BuildPart> BuildParts { get; set; }
-    }
-    public class PartContext : DbContext
-    {
-        public PartContext(DbContextOptions<PartContext> options)
-            : base(options)
-        {
-        }
         public DbSet<Part> Parts { get; set; }
-    }
-    public class PartTypeContext : DbContext
-    {
-        public PartTypeContext(DbContextOptions<PartTypeContext> options)
-            : base(options)
-        {
-        }
         public DbSet<PartType> PartTypes { get; set; }
     }
 

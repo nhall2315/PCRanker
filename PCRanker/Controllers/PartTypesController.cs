@@ -13,9 +13,9 @@ namespace PCRanker.Controllers
     [ApiController]
     public class PartTypesController : ControllerBase
     {
-        private readonly PartTypeContext _context;
+        private readonly PCRankerContext _context;
 
-        public PartTypesController(PartTypeContext context)
+        public PartTypesController(PCRankerContext context)
         {
             _context = context;
         }

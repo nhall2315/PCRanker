@@ -22,6 +22,11 @@ namespace PCRanker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BuildContext>(opt => opt.UseSqlServer("Server=.\\;Database=PCRanker;Trusted_Connection=True;"));
+            services.AddDbContext<BuildPartContext>(opt => opt.UseSqlServer("Server=.\\;Database=PCRanker;Trusted_Connection=True;"));
+            services.AddDbContext<PartContext>(opt => opt.UseSqlServer("Server=.\\;Database=PCRanker;Trusted_Connection=True;"));
+            services.AddDbContext<PartTypeContext>(opt => opt.UseSqlServer("Server=.\\;Database=PCRanker;Trusted_Connection=True;"));
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

@@ -14,6 +14,7 @@ namespace PCRanker.Models
 
     public class BuildPart
     {
+        public long ID { get; set; }
         [ForeignKey("Build")]
         public long BuildID { get; set; }
         [ForeignKey("Part")]

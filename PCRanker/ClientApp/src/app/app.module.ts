@@ -9,6 +9,8 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { PartBrowserComponent } from './part-browser/part-browser.component';
+import { ManageBuildsComponent } from './manage-builds/manage-builds.component';
 
 @NgModule({
   declarations: [
@@ -16,14 +18,19 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    PartBrowserComponent,
+    ManageBuildsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '',redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component:HomeComponent },
+      { path: 'part-browser', component: PartBrowserComponent },
+      { path: 'manage-builds', component: ManageBuildsComponent },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
     ])

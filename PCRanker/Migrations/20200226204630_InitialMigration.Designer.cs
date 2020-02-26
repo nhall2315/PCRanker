@@ -9,7 +9,7 @@ using PCRanker.Models;
 namespace PCRanker.Migrations
 {
     [DbContext(typeof(PCRankerContext))]
-    [Migration("20200226185958_InitialMigration")]
+    [Migration("20200226204630_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,18 +37,18 @@ namespace PCRanker.Migrations
 
             modelBuilder.Entity("PCRanker.Models.BuildPart", b =>
                 {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<long>("BuildID")
                         .HasColumnType("bigint");
 
                     b.Property<long>("PartID")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ID");
+                    b.Property<long>("ID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("BuildID", "PartID");
+
+                    b.HasIndex("PartID");
 
                     b.ToTable("BuildParts");
                 });
@@ -77,22 +77,9 @@ namespace PCRanker.Migrations
                     b.HasIndex("ID")
                         .IsUnique();
 
+                    b.HasIndex("TypeID");
+
                     b.ToTable("Parts");
-                });
-
-            modelBuilder.Entity("PCRanker.Models.PartPartType", b =>
-                {
-                    b.Property<long>("PartID")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PartTypeID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("PartID", "PartTypeID");
-
-                    b.HasIndex("PartTypeID");
-
-                    b.ToTable("PartPartType");
                 });
 
             modelBuilder.Entity("PCRanker.Models.PartType", b =>
@@ -113,17 +100,26 @@ namespace PCRanker.Migrations
                     b.ToTable("PartTypes");
                 });
 
-            modelBuilder.Entity("PCRanker.Models.PartPartType", b =>
+            modelBuilder.Entity("PCRanker.Models.BuildPart", b =>
                 {
-                    b.HasOne("PCRanker.Models.Part", "Part")
-                        .WithMany("PartPartType")
-                        .HasForeignKey("PartID")
+                    b.HasOne("PCRanker.Models.Build", "Build")
+                        .WithMany("BuildPart")
+                        .HasForeignKey("BuildID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PCRanker.Models.Part", "Part")
+                        .WithMany("BuildPart")
+                        .HasForeignKey("PartID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCRanker.Models.Part", b =>
+                {
                     b.HasOne("PCRanker.Models.PartType", "PartType")
-                        .WithMany("PartPartType")
-                        .HasForeignKey("PartTypeID")
+                        .WithMany()
+                        .HasForeignKey("TypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

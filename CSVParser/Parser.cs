@@ -62,7 +62,7 @@ namespace CSVParser
         }
         private void AddParts()
         {
-            Console.WriteLine("Populating database, please wait...")
+            Console.WriteLine("Populating database, please wait...");
             List<RowData> records = ParseAllSheets();
             foreach (RowData record in records)
             {

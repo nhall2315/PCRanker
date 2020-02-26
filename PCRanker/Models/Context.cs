@@ -21,16 +21,18 @@ namespace PCRanker.Models
                 .HasIndex(p => p.ID)
                 .IsUnique();
 
-            modelBuilder.Entity<PartPartType>()
-                .HasKey(ppt => new { ppt.PartID, ppt.PartTypeID });
-            modelBuilder.Entity<PartPartType>()
-                .HasOne(ppt => ppt.Part)
-                .WithMany(p => p.PartPartType)
-                .HasForeignKey(ppt => ppt.PartID);
-            modelBuilder.Entity<PartPartType>()
-                .HasOne(ppt => ppt.PartType)
-                .WithMany(pt => pt.PartPartType)
-                .HasForeignKey(ppt => ppt.PartTypeID);
+
+                modelBuilder.Entity<BuildPart>()
+                    .HasKey(bp => new {bp.BuildID, bp.PartID });
+                modelBuilder.Entity<BuildPart>()
+                    .HasOne(bp => bp.Build)
+                    .WithMany(b => b.BuildPart)
+                    .HasForeignKey(bp => bp.BuildID);
+                modelBuilder.Entity<BuildPart>()
+                    .HasOne(bp => bp.Part)
+                    .WithMany(p => p.BuildPart)
+                    .HasForeignKey(bp => bp.PartID);
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

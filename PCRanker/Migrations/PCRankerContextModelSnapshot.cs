@@ -72,6 +72,9 @@ namespace PCRanker.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("ID")
+                        .IsUnique();
+
                     b.ToTable("Parts");
                 });
 

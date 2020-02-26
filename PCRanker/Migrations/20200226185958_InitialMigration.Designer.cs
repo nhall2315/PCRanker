@@ -9,7 +9,7 @@ using PCRanker.Models;
 namespace PCRanker.Migrations
 {
     [DbContext(typeof(PCRankerContext))]
-    [Migration("20200226180111_InitialMigration")]
+    [Migration("20200226185958_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,6 +73,9 @@ namespace PCRanker.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("ID")
+                        .IsUnique();
 
                     b.ToTable("Parts");
                 });

@@ -91,6 +91,12 @@ namespace PCRanker.Migrations
                 name: "IX_PartPartType_PartTypeID",
                 table: "PartPartType",
                 column: "PartTypeID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parts_ID",
+                table: "Parts",
+                column: "ID",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

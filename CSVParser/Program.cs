@@ -10,10 +10,8 @@ namespace CSVParser
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Here");
             Parser parser = new Parser();
             parser.PopulateDatabase();
-
         }
     }
 }

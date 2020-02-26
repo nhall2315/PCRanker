@@ -17,6 +17,10 @@ namespace PCRanker.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Part>()
+                .HasIndex(p => p.ID)
+                .IsUnique();
+
             modelBuilder.Entity<PartPartType>()
                 .HasKey(ppt => new { ppt.PartID, ppt.PartTypeID });
             modelBuilder.Entity<PartPartType>()

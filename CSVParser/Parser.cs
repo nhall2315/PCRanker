@@ -23,6 +23,7 @@ namespace CSVParser
                                                 {"HDD", 3},
                                                 {"SSD", 4}
                                             };
+        private List<string> _parttypes = new List<string> { "CPU", "GPU", "RAM", "HDD", "SSD" };
         public string Path { get; set; }
         public string[] FileList { get; set; }
 
@@ -50,29 +51,36 @@ namespace CSVParser
             }
             return FinalRecord;
         }
-        private void AddTypeParts()
+        private void AddTypePart()
         {
-
+            foreach(string type in _parttypes)
+            {
+                PartType PartType = new PartType { Name = type };
+                _db.Add(PartType);
+                _db.SaveChanges();
+            }
         }
         private void AddParts()
         {
+            Console.WriteLine("Populating database, please wait...")
             List<RowData> records = ParseAllSheets();
             foreach (RowData record in records)
             {
-                Part part = new Part
+                Part Part = new Part
                 {
-                    //TypeID = TYPEID[record.Type],
+                    TypeID = _db.PartTypes.Single(pt => pt.Name == record.Type).ID,
                     Name = record.Name,
                     Rank = record.Rank,
                     BenchmarkScore = record.BenchmarkScore
                 };
-                _db.Add(part);
+                _db.Add(Part);
                 _db.SaveChanges();
             }
+            Console.WriteLine("Finished!");
         }
         public void PopulateDatabase()
         {
-            //AddTypeParts();
+            AddTypePart();
             AddParts();
         }
     }

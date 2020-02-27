@@ -147,5 +147,10 @@
       }
     }
   },
-  "defaultProject": "PCRanker"
+  "defaultProject": "PCRanker",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "sass"
+    }
+  }
 }

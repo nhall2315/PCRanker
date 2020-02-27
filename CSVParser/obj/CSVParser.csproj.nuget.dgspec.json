@@ -1,28 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\afrom\\Desktop\\KLA\\PCRanker\\CSVParser\\CSVParser.csproj": {}
+    "C:\\Users\\Noah\\Desktop\\PCRanker\\CSVParser\\CSVParser.csproj": {}
   },
   "projects": {
-    "C:\\Users\\afrom\\Desktop\\KLA\\PCRanker\\CSVParser\\CSVParser.csproj": {
+    "C:\\Users\\Noah\\Desktop\\PCRanker\\CSVParser\\CSVParser.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\afrom\\Desktop\\KLA\\PCRanker\\CSVParser\\CSVParser.csproj",
+        "projectUniqueName": "C:\\Users\\Noah\\Desktop\\PCRanker\\CSVParser\\CSVParser.csproj",
         "projectName": "CSVParser",
-        "projectPath": "C:\\Users\\afrom\\Desktop\\KLA\\PCRanker\\CSVParser\\CSVParser.csproj",
-        "packagesPath": "C:\\Users\\afrom\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\afrom\\Desktop\\KLA\\PCRanker\\CSVParser\\obj\\",
+        "projectPath": "C:\\Users\\Noah\\Desktop\\PCRanker\\CSVParser\\CSVParser.csproj",
+        "packagesPath": "C:\\Users\\Noah\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Noah\\Desktop\\PCRanker\\CSVParser\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\afrom\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Noah\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -81,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

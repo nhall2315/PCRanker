@@ -11,6 +11,9 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { PartBrowserComponent } from './part-browser/part-browser.component';
 import { ManageBuildsComponent } from './manage-builds/manage-builds.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,7 @@ import { ManageBuildsComponent } from './manage-builds/manage-builds.component';
     CounterComponent,
     FetchDataComponent,
     PartBrowserComponent,
-    ManageBuildsComponent
+    ManageBuildsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -33,7 +36,10 @@ import { ManageBuildsComponent } from './manage-builds/manage-builds.component';
       { path: 'manage-builds', component: ManageBuildsComponent },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-    ])
+    ]),
+    BrowserAnimationsModule,
+    MatTabsModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

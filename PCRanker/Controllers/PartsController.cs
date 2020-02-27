@@ -40,6 +40,22 @@ namespace PCRanker.Controllers
 
             return part;
         }
+        // GET: api/Parts/CPU
+        [HttpGet("Filter/{PartString}")]
+        public Task<List<Part>> GetFilteredParts(string PartString)
+        {
+            var parts = _context.Parts
+                .Where(p => p.PartType.Name == PartString)
+                .ToListAsync();
+
+            /*if (parts == null)
+            {
+                return NotFound();
+            }
+            */
+            return parts;
+        }
+
 
         // PUT: api/Parts/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for

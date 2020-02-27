@@ -33,6 +33,7 @@ namespace PCRanker.Models
                     .WithMany(p => p.BuildPart)
                     .HasForeignKey(bp => bp.PartID);
 
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

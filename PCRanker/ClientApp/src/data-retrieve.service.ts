@@ -9,7 +9,7 @@ import { analyzeAndValidateNgModules } from '@angular/compiler';
 @Injectable({
   providedIn: 'root'
 })
-export class DataRetrieveService {
+export class DatabaseService {
   myAppUrl: string = "";
   dataDict: { [key: string]: any; } = {};
   partTypes: string[] = ["CPU", "GPU", "RAM", "HDD", "SSD"];
@@ -39,7 +39,11 @@ export class DataRetrieveService {
     }
     return this.dataDict;
   }
-
+  getBuildParts(id: number){
+    return this._http.get(this.myAppUrl + `api/Builds/Parts/${id}`).pipe(
+      catchError(this.errorHandler),
+      );
+  }
   errorHandler(error: Response) {
     console.log(error);
     return Observable.throw(error);

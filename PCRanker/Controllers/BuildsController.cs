@@ -40,7 +40,16 @@ namespace PCRanker.Controllers
 
             return build;
         }
+        // GET: api/Builds/{id}
+        [HttpGet("Parts/{id}")]
+        public Task<List<BuildPart>> GetFilteredParts(long id)
+        {
+            var parts = _context.BuildParts
+                .Where(bp => bp.BuildID == id)
+                .ToListAsync();
 
+            return parts;
+        }
         // PUT: api/Builds/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.

@@ -42,6 +42,7 @@ namespace PCRanker.Controllers
 
             return part;
         }
+
         // GET: api/Parts/CPU
         [HttpGet("Filter/{PartString}")]
         public Task<List<Part>> GetFilteredParts(string PartString)

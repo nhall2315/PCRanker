@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DataRetrieveService } from 'src/data-retrieve.service';
+import { DatabaseService} from 'src/data-retrieve.service';
 import { DataSource, SelectionModel } from '@angular/cdk/collections';
 import { Part, partType, build } from '../part';
 import { BehaviorSubject } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-
+import { MatExpansionModule } from '@angular/material/expansion';
 import { catchError, tap } from 'rxjs/operators';
 
 
@@ -30,7 +29,7 @@ export class PartBrowserComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private dataRetrieve: DataRetrieveService) {}
+  constructor(private dataRetrieve: DatabaseService) {}
   ngOnInit() 
   {
     this.dataRetrieve.getModelData("PartTypes").subscribe(types => this.partTypes = types);

@@ -23,13 +23,16 @@ export class DataRetrieveService {
       catchError(this.errorHandler),
       );
   }
+  addModelData(model: string, modelData){
+    return this._http.post(this.myAppUrl + `api/${model}`, modelData).pipe(
+      catchError(this.errorHandler),
+      );
+  }
   getPartList(partType: string) {
-    console.log('we made it');
     return this._http.get(this.myAppUrl + `api/Parts/Filter/${partType}`).pipe(
       catchError(this.errorHandler),
       );
   }
-
   getFilteredParts(){
     for (let type of this.partTypes){
       this.getPartList(type).subscribe(partData => this.dataDict[type] = partData);

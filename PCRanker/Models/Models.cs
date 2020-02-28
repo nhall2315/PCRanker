@@ -17,7 +17,7 @@ namespace PCRanker.Models
     {
         public long ID { get; set; }
         [ForeignKey("TypeID")]
-        public PartType PartType { get; set; }
+        public virtual PartType PartType { get; set; }
         public long TypeID { get; set; }
 
         public string Name { get; set; }
@@ -30,7 +30,7 @@ namespace PCRanker.Models
     {
         public long ID { get; set; }
         public long BuildID { get; set; }
-        public Build Build { get; set; }
+        public virtual Build Build { get; set; }
         public long PartID { get; set; }
         public Part Part { get; set; }
     }

@@ -24,7 +24,9 @@ namespace PCRanker.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Part>>> GetParts()
         {
-            return await _context.Parts.ToListAsync();
+            return await _context.Parts
+                .Include(p => p.PartType)
+                .ToListAsync();
         }
 
         // GET: api/Parts/5
@@ -44,15 +46,11 @@ namespace PCRanker.Controllers
         [HttpGet("Filter/{PartString}")]
         public Task<List<Part>> GetFilteredParts(string PartString)
         {
+
             var parts = _context.Parts
                 .Where(p => p.PartType.Name == PartString)
                 .ToListAsync();
 
-            /*if (parts == null)
-            {
-                return NotFound();
-            }
-            */
             return parts;
         }
 

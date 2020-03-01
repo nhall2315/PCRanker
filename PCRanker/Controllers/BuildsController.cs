@@ -46,7 +46,7 @@ namespace PCRanker.Controllers
         {
             var parts = await _context.BuildParts
                 .Where(bp => bp.BuildID == id)
-                //.Include(bp => bp.Part)
+                .Include(bp => bp.Part)
                 .ToListAsync();
 
             return parts;

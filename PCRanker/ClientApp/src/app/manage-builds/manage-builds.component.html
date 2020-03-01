@@ -11,8 +11,8 @@
               Test Description
             </mat-panel-description>
           </mat-expansion-panel-header>
-            <div *ngFor="let part of currentParts">
-                <p>{{part.id}}</p>
+            <div *ngFor="let buildPart of currentParts">
+                <p>{{buildPart.part.name}}</p>
             </div>
         </mat-expansion-panel>
       </mat-accordion>

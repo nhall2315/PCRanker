@@ -21,7 +21,6 @@ namespace PCRanker.Models
                 .HasIndex(p => p.ID)
                 .IsUnique();
 
-
                 modelBuilder.Entity<BuildPart>()
                     .HasKey(bp => new {bp.BuildID, bp.PartID });
                 modelBuilder.Entity<BuildPart>()

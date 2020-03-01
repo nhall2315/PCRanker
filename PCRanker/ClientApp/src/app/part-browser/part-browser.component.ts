@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatabaseService} from 'src/data-retrieve.service';
 import { DataSource, SelectionModel } from '@angular/cdk/collections';
-import { Part, partType, build } from '../part';
+import { Part, PartType, Build } from '../part';
 import { BehaviorSubject } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -18,12 +18,12 @@ import { catchError, tap } from 'rxjs/operators';
 
 export class PartBrowserComponent implements OnInit {
   partInfo: any;
-  partTypes: any;
+  partTypes: PartType[];
   selectedBuild: Part;
   dataSource: MatTableDataSource<Part>;
   displayedColumns: string[] = ["select","id", "partType","name", "rank", "benchmarkScore"]
   selection = new SelectionModel<Part>(true, []);
-  builds: build[];
+  builds: Build[];
   
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -32,14 +32,14 @@ export class PartBrowserComponent implements OnInit {
   constructor(private dataRetrieve: DatabaseService) {}
   ngOnInit() 
   {
-    this.dataRetrieve.getModelData("PartTypes").subscribe(types => this.partTypes = types);
-    this.dataRetrieve.getModelData("Parts").subscribe(parts => {
+    this.dataRetrieve.getPartTypes().subscribe(types => this.partTypes = types);
+    this.dataRetrieve.getParts().subscribe(parts => {
       this.dataSource = new MatTableDataSource(parts);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
 
-    this.dataRetrieve.getModelData("Builds").subscribe(builds => this.builds = builds);  
+    this.dataRetrieve.getBuilds().subscribe(builds => this.builds = builds);  
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

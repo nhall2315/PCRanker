@@ -40,12 +40,13 @@ namespace PCRanker.Controllers
 
             return build;
         }
-        // GET: api/Builds/{id}
+        // GET: api/Builds/Parts/{id}
         [HttpGet("Parts/{id}")]
-        public Task<List<BuildPart>> GetFilteredParts(long id)
+        public async Task<List<BuildPart>> GetFilteredParts(long id)
         {
-            var parts = _context.BuildParts
+            var parts = await _context.BuildParts
                 .Where(bp => bp.BuildID == id)
+                //.Include(bp => bp.Part)
                 .ToListAsync();
 
             return parts;

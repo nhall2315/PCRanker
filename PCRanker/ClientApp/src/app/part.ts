@@ -1,4 +1,4 @@
-export interface partType
+export interface PartType
 {
     id: number,
     name: string,
@@ -7,18 +7,18 @@ export interface partType
 export interface Part 
 {
     id: number,
-    partType: partType,
+    partType: PartType,
     typeID: 3,
     name: string,
     benchMarkScore: number,
     buildPart: null
 }
-export interface build
+export interface Build
 {
     id: number,
     name: string
 }
-export interface buildPart
+export interface BuildPart
 {
     id: number,
     buildID: number,

@@ -1,10 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, ObservableLike } from 'rxjs';
 import { Router } from '@angular/router';
 import { catchError, map, tap } from 'rxjs/operators';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
-
+import { Part, PartType, Build } from './app/part'
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +23,25 @@ export class DatabaseService {
       catchError(this.errorHandler),
       );
   }
+  getParts(){
+    return this._http.get<Part[]>(this.myAppUrl + 'api/Parts').pipe(
+      catchError(this.errorHandler),
+      );
+  }
+  getPartTypes(){
+    return this._http.get<PartType[]>(this.myAppUrl + 'api/PartTypes').pipe(
+      catchError(this.errorHandler),
+      );
+  }
+  getBuilds(){
+    return this._http.get<Build[]>(this.myAppUrl + 'api/Builds').pipe(
+      catchError(this.errorHandler),
+      );
+  }
   addModelData(model: string, modelData){
     return this._http.post(this.myAppUrl + `api/${model}`, modelData).pipe(
       catchError(this.errorHandler),
-      );
+      ); 
   }
   getPartList(partType: string) {
     return this._http.get(this.myAppUrl + `api/Parts/Filter/${partType}`).pipe(
@@ -40,7 +55,7 @@ export class DatabaseService {
     return this.dataDict;
   }
   getBuildParts(id: number){
-    return this._http.get(this.myAppUrl + `api/Builds/Parts/${id}`).pipe(
+    return this._http.get<Part[]>(this.myAppUrl + `api/Builds/Parts/${id}`).pipe(
       catchError(this.errorHandler),
       );
   }

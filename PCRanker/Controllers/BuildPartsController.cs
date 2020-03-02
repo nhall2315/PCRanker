@@ -86,7 +86,7 @@ namespace PCRanker.Controllers
         }
 
         // DELETE: api/BuildParts/5
-        [HttpDelete("{id}")]
+        /*[HttpDelete("{id}")]
         public async Task<ActionResult<BuildPart>> DeleteBuildPart(long id)
         {
             var buildPart = await _context.BuildParts.FindAsync(id);
@@ -99,8 +99,21 @@ namespace PCRanker.Controllers
             await _context.SaveChangesAsync();
 
             return buildPart;
-        }
+        }*/
+        // DELETE: api/BuildParts/1/3
+        [HttpDelete("{buildID}/{partID}")]
+        public async Task<BuildPart> DeleteBuildPart(long buildID, long partID)
+        {
 
+            var parts = await _context.BuildParts
+                .Where(bp => bp.BuildID == buildID && bp.PartID == partID)
+                .ToListAsync();
+
+            var part = parts[0];
+            _context.BuildParts.Remove(part);
+            await _context.SaveChangesAsync();
+            return part;
+        }
         private bool BuildPartExists(long id)
         {
             return _context.BuildParts.Any(e => e.ID == id);

@@ -8,7 +8,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { catchError, tap } from 'rxjs/operators';
-
+import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-part-browser',
@@ -23,13 +23,16 @@ export class PartBrowserComponent implements OnInit {
   dataSource: MatTableDataSource<Part>;
   displayedColumns: string[] = ["select","id", "partType","name", "rank", "benchmarkScore"]
   selection = new SelectionModel<Part>(true, []);
+  snackBarConfig = new MatSnackBarConfig();
   builds: Build[];
+  label: string;
+  action: boolean = false;
   
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private dataRetrieve: DatabaseService) {}
+  constructor(private dataRetrieve: DatabaseService, private snackBar: MatSnackBar) {}
   ngOnInit() 
   {
     this.dataRetrieve.getPartTypes().subscribe(types => this.partTypes = types);
@@ -38,7 +41,7 @@ export class PartBrowserComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
-
+    this.configSnackBar();
     this.dataRetrieve.getBuilds().subscribe(builds => this.builds = builds);  
   }
   applyFilter(event: Event) {
@@ -62,6 +65,14 @@ export class PartBrowserComponent implements OnInit {
         let buildPart = {buildID: this.selectedBuild.id, partID: part.id};
         this.dataRetrieve.addModelData("BuildParts", buildPart).subscribe();
       }
+      this.openSnackBar(`Parts have been successfully added to ${this.selectedBuild.name}!`);
     }
+  }
+  configSnackBar(){
+    this.snackBarConfig = new MatSnackBarConfig();
+    this.snackBarConfig.duration = 2000;
+  }
+  openSnackBar(msg){
+    this.snackBar.open(msg, this.label, this.snackBarConfig);
   }
 }

@@ -43,6 +43,16 @@ export class DatabaseService {
       catchError(this.errorHandler),
       ); 
   }
+  deleteBuild(id: number){
+    return this._http.delete(this.myAppUrl + `api/Builds/${id}`).pipe(
+      catchError(this.errorHandler),
+      ); 
+  }
+  deleteBuildParts(buildID: number, partID: number){
+    return this._http.delete(this.myAppUrl + `api/BuildParts/${buildID}/${partID}`).pipe(
+      catchError(this.errorHandler),
+      ); 
+  }
   getPartList(partType: string) {
     return this._http.get(this.myAppUrl + `api/Parts/Filter/${partType}`).pipe(
       catchError(this.errorHandler),

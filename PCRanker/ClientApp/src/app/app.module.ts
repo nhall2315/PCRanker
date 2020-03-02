@@ -25,7 +25,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card'; 
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
-
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,6 +63,8 @@ import { MatListModule } from '@angular/material/list';
     MatCardModule,
     MatExpansionModule,
     MatListModule,
+    MatSnackBarModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

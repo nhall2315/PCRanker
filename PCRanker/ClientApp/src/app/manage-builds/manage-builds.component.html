@@ -1,20 +1,39 @@
-<p>manage-builds works!</p>
-<div *ngFor="let build of builds">
-    <mat-accordion>
-        <mat-expansion-panel (opened)="onExpand($event, build.id)"
-                             (closed)="panelOpenState = false">          
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              {{build.name}}
-            </mat-panel-title>
-            <mat-panel-description>
-              Test Description
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-            <div *ngFor="let buildPart of currentParts">
-                <p>{{buildPart.part.name}}</p>
-            </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-      
+<div id="build-form">
+    <form [formGroup]="buildForm" (ngSubmit)="onCreate()">
+        <mat-form-field appearance="fill">
+            <mat-label>Build Name</mat-label>
+            <input matInput formControlName="name">
+        </mat-form-field>
+        <button class="submit-btns" id="add-class-btn" type="submit"  [disabled]="buildForm.invalid" mat-raised-button color="accent">Create Build</button>
+    </form>
 </div>
+<div id='manage-builds' *ngFor="let build of buildData | keyvalue">
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-checkbox color="primary" 
+              (click)="$event.stopPropagation()" 
+              (keydown)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(build.key) : null"
+              [checked]="selection.isSelected()"
+              [aria-label]="checkboxLabel(build)">
+                {{build.key}}
+            </mat-checkbox>
+          </mat-expansion-panel-header>
+          <mat-list *ngFor="let buildPart of build.value">
+            <mat-list-item> 
+                <mat-checkbox color="primary" 
+                (click)="$event.stopPropagation()" 
+                (change)="$event ? partSelection.toggle(buildPart) : null"
+                [checked]="partSelection.isSelected()"
+ >
+                {{buildPart.part.name}}
+                </mat-checkbox>
+                
+
+            </mat-list-item>
+
+           </mat-list>
+      </mat-expansion-panel>
+</div>
+<button id="submit-btn" (click)="onBuildDelete()"  mat-raised-button color="accent">Delete Selected Builds</button>
+<button id="submit-btn" (click)="onBuildPartDelete()"  mat-raised-button color="primary">Delete Selected Parts From Builds</button>

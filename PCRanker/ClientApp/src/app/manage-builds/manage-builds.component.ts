@@ -36,7 +36,7 @@ export class ManageBuildsComponent implements OnInit {
       for(let build of this.builds){
         this.db.getBuildParts(build.id).subscribe(parts => 
           {
-            this.buildData[build.name] = parts
+            this.buildData[build.name] = parts;
             this.buildData[build.name]['id'] = build.id;
             this.getOverallScore(build.name);
           });
@@ -56,7 +56,7 @@ export class ManageBuildsComponent implements OnInit {
     let buildParts = this.buildData[buildName];
     this.buildScores[buildName] = 0;
     for(let buildPart of buildParts){
-      this.buildScores[buildName] += buildPart['part'].benchmarkScore;
+      this.buildScores[buildName] += buildPart['part']['benchmarkScore'];
     }
   }
 
@@ -67,7 +67,7 @@ export class ManageBuildsComponent implements OnInit {
     }
     else{
       let newBuild: any = {name: this.buildForm.value.name};
-      this.db.addModelData("Builds", newBuild).subscribe(build =>{
+      this.db.addBuildData(newBuild).subscribe(build =>{
         this.openSnackBar("Build has been successfully created!");
         this.buildData[build.name] = [];
         this.buildData[build.name]['id'] = build.id;

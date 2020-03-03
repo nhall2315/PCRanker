@@ -4,7 +4,7 @@ import { Observable, ObservableLike } from 'rxjs';
 import { Router } from '@angular/router';
 import { catchError, map, tap } from 'rxjs/operators';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
-import { Part, PartType, Build } from './app/part'
+import { Part, PartType, Build, BuildPart } from './app/part'
 
 @Injectable({
   providedIn: 'root'
@@ -75,7 +75,7 @@ export class DatabaseService {
     return this.dataDict;
   }
   getBuildParts(id: number){
-    return this._http.get<Part[]>(this.myAppUrl + `api/Builds/Parts/${id}`).pipe(
+    return this._http.get<BuildPart[]>(this.myAppUrl + `api/Builds/Parts/${id}`).pipe(
       catchError(this.errorHandler),
       );
   }

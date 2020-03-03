@@ -48,6 +48,11 @@ export class DatabaseService {
       catchError(this.errorHandler),
       ); 
   }
+  addBuildPart(buildPart){
+    return this._http.post(this.myAppUrl + `api/BuildParts`, buildPart).pipe(
+      catchError(this.errorHandler),
+      ); 
+  }
   addModelData(model: string, modelData){
     return this._http.post(this.myAppUrl + `api/${model}`, modelData).pipe(
       catchError(this.errorHandler),
@@ -79,6 +84,7 @@ export class DatabaseService {
       catchError(this.errorHandler),
       );
   }
+
   errorHandler(error: Response) {
     console.log(error);
     return Observable.throw(error);

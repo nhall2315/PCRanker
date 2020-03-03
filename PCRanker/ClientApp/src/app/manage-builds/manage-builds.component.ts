@@ -4,7 +4,6 @@ import { Part, Build, BuildPart } from '../part'
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { SelectionModel } from '@angular/cdk/collections';
-import { KeyValuePipe } from '@angular/common';
 
 @Component({
   selector: 'app-manage-builds',
@@ -31,6 +30,12 @@ export class ManageBuildsComponent implements OnInit {
       'name': new FormControl(null, Validators.required)
     });
     this.panelOpenState = false;
+    this.setupBuildData();
+    this.configSnackBar();
+  }
+
+  //Gets each build name, each build's parts and build's score to display
+  setupBuildData(){
     this.db.getBuilds().subscribe( builds => { 
       this.builds = builds;
       for(let build of this.builds){
@@ -42,9 +47,7 @@ export class ManageBuildsComponent implements OnInit {
           });
       }
     });
-    this.configSnackBar()
   }
-
   configSnackBar(){
     this.snackBarConfig = new MatSnackBarConfig();
     this.snackBarConfig.duration = 2000;
@@ -52,6 +55,8 @@ export class ManageBuildsComponent implements OnInit {
   openSnackBar(msg){
     this.snackBar.open(msg, this.label, this.snackBarConfig);
   }
+
+  //Computes each build's total benchmark scores
   getOverallScore(buildName){
     let buildParts = this.buildData[buildName];
     this.buildScores[buildName] = 0;
@@ -61,7 +66,7 @@ export class ManageBuildsComponent implements OnInit {
   }
 
   //Handles creation of new builds
-  onCreate(event){
+  onBuildCreate(event){
     if(this.buildData[this.buildForm.value.name]){
       this.openSnackBar('Build names must be unique!');
     }
@@ -75,11 +80,14 @@ export class ManageBuildsComponent implements OnInit {
       });
     }
   }
-
+  //On deletion, the build's entries from the page's display info is deleted
+  //Build's checkbox is also toggled off
   onBuildDelete(){
+    console.log(this.selection.selected);
     if(this.selection.selected.length > 0){
         for(let selected of this.selection.selected){
           let buildID = this.buildData[selected]['id'];
+          this.selection.toggle(selected);
           this.db.deleteBuild(buildID).subscribe(resp => {
             delete this.buildData[selected];
             delete this.buildScores[selected];
@@ -92,6 +100,8 @@ export class ManageBuildsComponent implements OnInit {
     }
   }
 
+  //On deletion, the display info is updated to exclude the part
+  //Build part's check box is also toggled off
   onBuildPartDelete(){
     console.log(this.partSelection.selected);
     if( this.partSelection.selected.length > 0){
@@ -100,25 +110,24 @@ export class ManageBuildsComponent implements OnInit {
         let buildParts = this.buildData[buildName];
         let partID = buildPart['part']['id'];
 
-        this.buildData[buildName] = buildParts.filter(p => p.part.id != partID);
-        console.log(buildParts);
+        this.partSelection.toggle(buildPart);
+        this.buildData[buildName] = buildParts.filter(bp => bp.part.id != partID);
         this.db.deleteBuildParts(buildPart.buildID, buildPart.partID).subscribe(resp =>{
           this.getOverallScore(buildName);
-        })
-        
+        });
       }
       this.openSnackBar("The selected build parts have been deleted!");
     }
     else{
       this.openSnackBar("No builds parts have been selected!")
     }
-
   }
 
   checkboxLabel(row?: string): string {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'}`;
   }
 
+  //Called from the template to get the build score
   getBuildScore(buildData: any){
     let dictKey = buildData['key'];
     this.score = this.buildScores[dictKey];

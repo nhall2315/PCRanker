@@ -8,7 +8,8 @@ export interface Part
 {
     id: number,
     partType: PartType,
-    typeID: 3,
+    typeID: number,
+    rank: number,
     name: string,
     benchMarkScore: number,
     buildPart: null

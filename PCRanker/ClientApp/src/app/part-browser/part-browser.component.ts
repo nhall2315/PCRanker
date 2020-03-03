@@ -19,7 +19,7 @@ import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
 export class PartBrowserComponent implements OnInit {
   partInfo: any;
   partTypes: PartType[];
-  selectedBuild: Part;
+  selectedBuild: Build;
   dataSource: MatTableDataSource<Part>;
   displayedColumns: string[] = ["select","id", "partType","name", "rank", "benchmarkScore"]
   selection = new SelectionModel<Part>(true, []);
@@ -32,47 +32,68 @@ export class PartBrowserComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private dataRetrieve: DatabaseService, private snackBar: MatSnackBar) {}
-  ngOnInit() 
-  {
-    this.dataRetrieve.getPartTypes().subscribe(types => this.partTypes = types);
-    this.dataRetrieve.getParts().subscribe(parts => {
+  constructor(private db: DatabaseService, private snackBar: MatSnackBar) {}
+
+  ngOnInit() {
+    this.db.getPartTypes().subscribe(types => this.partTypes = types);
+    this.db.getBuilds().subscribe(builds => this.builds = builds);  
+    this.configSnackBar();
+    this.setupPartData();
+  }
+
+  //Gets part data and sets up table paginator, sort and filter
+  setupPartData() {
+    this.db.getParts().subscribe(parts => {
       this.dataSource = new MatTableDataSource(parts);
+      this.dataSource.filterPredicate = function(data, filter:string): boolean {
+        return data.name.toLowerCase().includes(filter) 
+        || data.partType.name.toLowerCase().includes(filter)
+        || data.rank.toString().includes(filter);
+      };
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
-    this.configSnackBar();
-    this.dataRetrieve.getBuilds().subscribe(builds => this.builds = builds);  
   }
+ 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+     this.dataSource.paginator.firstPage();
     }
   }
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: Part): string {
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-  }
-  onSubmit()
-  {
-    if(this.selectedBuild && this.selection.selected)
-    {
-      for(let part of this.selection.selected)
-      {
+
+  //Adds selected parts to selected build and checks if the part exists in the build
+  onSubmit() {
+    if(this.selectedBuild && this.selection.selected){
+      for(let part of this.selection.selected){
         let buildPart = {buildID: this.selectedBuild.id, partID: part.id};
-        this.dataRetrieve.addModelData("BuildParts", buildPart).subscribe();
+
+        this.db.getBuildParts(this.selectedBuild.id).subscribe(buildParts => {
+          let matchingParts = buildParts.filter(bp => bp.partID == part.id);
+          let matchingTypes = buildParts.filter(bp => bp.part.typeID == part.typeID);
+
+          if(matchingParts.length > 0 || matchingTypes.length > 0){
+            this.openSnackBar("Each build must contain unique parts and part types!");
+          }
+          else {
+            this.db.addBuildPart(buildPart).subscribe();
+            this.openSnackBar(`Parts have been successfully added to ${this.selectedBuild.name}!`);
+          }
+        });
+
       }
-      this.openSnackBar(`Parts have been successfully added to ${this.selectedBuild.name}!`);
     }
+    this.openSnackBar("Please select a build or parts!");
   }
-  configSnackBar(){
+
+  configSnackBar() {
     this.snackBarConfig = new MatSnackBarConfig();
     this.snackBarConfig.duration = 2000;
   }
-  openSnackBar(msg){
+  
+  openSnackBar(msg) {
     this.snackBar.open(msg, this.label, this.snackBarConfig);
   }
 }

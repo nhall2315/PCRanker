@@ -1,6 +1,6 @@
 <h1>Manage Builds</h1>
 <div id="build-form">
-    <form [formGroup]="buildForm" (ngSubmit)="onCreate()">
+    <form [formGroup]="buildForm" (ngSubmit)="onBuildCreate()">
         <mat-form-field appearance="fill">
             <mat-label>Build Name</mat-label>
             <input matInput formControlName="name">
@@ -31,8 +31,7 @@
                 <mat-checkbox color="primary" 
                 (click)="$event.stopPropagation()" 
                 (change)="$event ? partSelection.toggle(buildPart) : null"
-                [checked]="partSelection.isSelected()"
- >
+                [checked]="partSelection.isSelected()">
                 Name: {{buildPart.part.name}}
                 Benchmark Score:{{buildPart.part.benchmarkScore}}
                 </mat-checkbox>

@@ -27,6 +27,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar'; 
+import { MatGridListModule } from '@angular/material/grid-list'; 
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +65,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatExpansionModule,
     MatListModule,
     MatSnackBarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatGridListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

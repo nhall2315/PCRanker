@@ -22,5 +22,7 @@ export interface BuildPart
 {
     id: number,
     buildID: number,
-    partID: number
+    build: Build,
+    partID: number,
+    part: Part
 }

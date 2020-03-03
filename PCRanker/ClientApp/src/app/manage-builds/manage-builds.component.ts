@@ -13,15 +13,16 @@ import { KeyValuePipe } from '@angular/common';
 })
 export class ManageBuildsComponent implements OnInit {
   panelOpenState: boolean;
-  currentParts: Part[];
   builds: Build[];
-  buildData: Record<string, any> = { };
+  buildData: Record<string, BuildPart[]> = { };
+  buildScores: Record<string, number> = { };
   buildForm: FormGroup;
   selection = new SelectionModel<string>(true, []);
   partSelection = new SelectionModel<BuildPart>(true, []);
   snackBarConfig = new MatSnackBarConfig();
   label: string;
   action: boolean = false;
+  score: number;
   constructor(private db: DatabaseService, private snackBar: MatSnackBar) { }
 
   //Form set up, and build data gathered
@@ -34,15 +35,16 @@ export class ManageBuildsComponent implements OnInit {
       this.builds = builds;
       for(let build of this.builds){
         this.db.getBuildParts(build.id).subscribe(parts => 
-          {this.buildData[build.name] = parts
+          {
+            this.buildData[build.name] = parts
             this.buildData[build.name]['id'] = build.id;
-            
+            this.getOverallScore(build.name);
           });
       }
-      this.getOverallScores();
     });
     this.configSnackBar()
   }
+
   configSnackBar(){
     this.snackBarConfig = new MatSnackBarConfig();
     this.snackBarConfig.duration = 2000;
@@ -50,49 +52,75 @@ export class ManageBuildsComponent implements OnInit {
   openSnackBar(msg){
     this.snackBar.open(msg, this.label, this.snackBarConfig);
   }
-  getOverallScores(){
-    for(let key in this.buildData.keys){
-      console.log(key);
+  getOverallScore(buildName){
+    let buildParts = this.buildData[buildName];
+    this.buildScores[buildName] = 0;
+    for(let buildPart of buildParts){
+      this.buildScores[buildName] += buildPart['part'].benchmarkScore;
     }
   }
+
+  //Handles creation of new builds
   onCreate(event){
     if(this.buildData[this.buildForm.value.name]){
       this.openSnackBar('Build names must be unique!');
     }
     else{
       let newBuild: any = {name: this.buildForm.value.name};
-      this.db.addModelData("Builds", newBuild).subscribe(resp =>{
-        this.openSnackBar("Build Successfully Created! Now refreshing the page...");
-        this.refresh();
+      this.db.addModelData("Builds", newBuild).subscribe(build =>{
+        this.openSnackBar("Build has been successfully created!");
+        this.buildData[build.name] = [];
+        this.buildData[build.name]['id'] = build.id;
+        this.buildScores[build.name] = 0;
       });
     }
   }
-  refresh(){
-    location.reload();
-  }
+
   onBuildDelete(){
     if(this.selection.selected.length > 0){
         for(let selected of this.selection.selected){
           let buildID = this.buildData[selected]['id'];
-          this.db.deleteBuild(buildID).subscribe();
+          this.db.deleteBuild(buildID).subscribe(resp => {
+            delete this.buildData[selected];
+            delete this.buildScores[selected];
+          });
         }
-        this.openSnackBar("Selected Builds Deleted! Now refresheing the page...");
-        this.refresh();
+        this.openSnackBar("The selected builds have been deleted!");
     }
     else{
-      this.openSnackBar("No Builds Selected!");
+      this.openSnackBar("No builds have been selected!");
     }
   }
+
   onBuildPartDelete(){
     console.log(this.partSelection.selected);
-    for(let part of this.partSelection.selected){
-      this.db.deleteBuildParts(part.buildID, part.partID).subscribe(resp => {
-        this.openSnackBar("Selected Parts Have Been Deleted! Now refreshing... the page");
-      });
+    if( this.partSelection.selected.length > 0){
+      for(let buildPart of this.partSelection.selected){
+        let buildName = buildPart['build']['name'];
+        let buildParts = this.buildData[buildName];
+        let partID = buildPart['part']['id'];
+
+        this.buildData[buildName] = buildParts.filter(p => p.part.id != partID);
+        console.log(buildParts);
+        this.db.deleteBuildParts(buildPart.buildID, buildPart.partID).subscribe(resp =>{
+          this.getOverallScore(buildName);
+        })
+        
+      }
+      this.openSnackBar("The selected build parts have been deleted!");
     }
-    this.refresh();
+    else{
+      this.openSnackBar("No builds parts have been selected!")
+    }
+
   }
+
   checkboxLabel(row?: string): string {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'}`;
+  }
+
+  getBuildScore(buildData: any){
+    let dictKey = buildData['key'];
+    this.score = this.buildScores[dictKey];
   }
 }

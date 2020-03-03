@@ -38,6 +38,16 @@ export class DatabaseService {
       catchError(this.errorHandler),
       );
   }
+  getBuild(id: number){
+    return this._http.get<Build>(this.myAppUrl + `api/Builds/${id}`).pipe(
+      catchError(this.errorHandler),
+      );
+  }
+  addBuildData(modelData){
+    return this._http.post<Build>(this.myAppUrl + `api/Builds`, modelData).pipe(
+      catchError(this.errorHandler),
+      ); 
+  }
   addModelData(model: string, modelData){
     return this._http.post(this.myAppUrl + `api/${model}`, modelData).pipe(
       catchError(this.errorHandler),

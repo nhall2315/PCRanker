@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DataRetrieveService } from './data-retrieve.service';
+import { PartService } from './part.service';
 
-describe('DataRetrieveService', () => {
+describe('PartService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: DataRetrieveService = TestBed.get(DataRetrieveService);
+    const service: PartService = TestBed.get(PartService);
     expect(service).toBeTruthy();
   });
 });

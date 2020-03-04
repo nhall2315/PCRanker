@@ -11,11 +11,6 @@ import { PartTypeService } from './part-type.service';
 
 export class CrudService {
 
-
-
-;
-
-constructor(public _bps: BuildPartService, public _bs: BuildService,public _ps: PartService, public _pts: PartTypeService, @Inject('BASE_URL') baseUrl: string) {
-  
-  }
+//This can be avoided. We can keep it simple simply inject the minimum amount of things
+constructor(public _bps: BuildPartService, public _bs: BuildService, public _ps: PartService, public _pts: PartTypeService, @Inject('BASE_URL') baseUrl: string) { }
 }

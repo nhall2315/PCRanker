@@ -20,27 +20,25 @@ export class ManageBuildsComponent implements OnInit {
   selection = new SelectionModel<string>(true, []);
   partSelection = new SelectionModel<BuildPart>(true, []);
   label: string;
-  action: boolean = false;
+  action: false;
   score: number;
-  
   constructor(private db: CrudService, private sb: SnackBarService) { }
 
-  //Form set up, and build data gathered
+  // Form set up, and build data gathered
   ngOnInit() {
-    this.buildForm= new FormGroup({
+    this.buildForm = new FormGroup({
       'name': new FormControl(null, Validators.required)
     });
     this.panelOpenState = false;
     this.setupBuildData();
   }
 
-  //Gets each build name, each build's parts and build's score to display
-  setupBuildData(){
-    this.db._bs.getBuilds().subscribe( builds => { 
+  // Gets each build name, each build's parts and build's score to display
+  setupBuildData() {
+    this.db._bs.getBuilds().subscribe( builds => {
       this.builds = builds;
-      for(let build of this.builds){
-        this.db._bps.getBuildParts(build.id).subscribe(parts => 
-          {
+      for (const build of this.builds) {
+        this.db._bps.getBuildParts(build.id).subscribe(parts => {
             this.buildData[build.name] = parts;
             this.buildData[build.name]['id'] = build.id;
             this.getOverallScore(build.name);
@@ -48,70 +46,67 @@ export class ManageBuildsComponent implements OnInit {
       }
     });
   }
-  //Computes each build's total benchmark scores
+  // Computes each build's total benchmark scores
   getOverallScore(buildName){
-    let buildParts = this.buildData[buildName];
+    const buildParts = this.buildData[buildName];
     this.buildScores[buildName] = 0;
-    for(let buildPart of buildParts){
+    for (const buildPart of buildParts){
       this.buildScores[buildName] += buildPart['part']['benchmarkScore'];
     }
   }
 
-  //Handles creation of new builds
-  onBuildCreate(event){
-    if(this.buildData[this.buildForm.value.name]){
+  // Handles creation of new builds
+  onBuildCreate(event) {
+    if (this.buildData[this.buildForm.value.name]){
       this.sb.openMsg('Build names must be unique!');
-    }
-    else{
-      let newBuild: any = {name: this.buildForm.value.name};
+    } else {
+      const newBuild: any = {name: this.buildForm.value.name};
       this.db._bs.addBuildData(newBuild).subscribe(build =>{
-        this.sb.openMsg("Build has been successfully created!");
+        this.sb.openMsg('Build has been successfully created!');
         this.buildData[build.name] = [];
         this.buildData[build.name]['id'] = build.id;
         this.buildScores[build.name] = 0;
       });
     }
   }
-  //On deletion, the build's entries from the page's display info is deleted
-  //Build's checkbox is also toggled off
-  onBuildDelete(){
+  // On deletion, the build's entries from the page's display info is deleted
+  // Build's checkbox is also toggled off
+  onBuildDelete() {
     console.log(this.selection.selected);
-    if(this.selection.selected.length > 0){
-        for(let selected of this.selection.selected){
-          let buildID = this.buildData[selected]['id'];
+    if (this.selection.selected.length > 0) {
+        for (const selected of this.selection.selected) {
+          const buildID = this.buildData[selected]['id'];
           this.selection.toggle(selected);
           this.db._bs.deleteBuild(buildID).subscribe(resp => {
             delete this.buildData[selected];
             delete this.buildScores[selected];
           });
         }
-        this.sb.openMsg("The selected builds have been deleted!");
-    }
-    else{
-      this.sb.openMsg("No builds have been selected!");
+        this.sb.openMsg('The selected builds have been deleted!');
+    } else {
+      this.sb.openMsg('No builds have been selected!');
     }
   }
 
-  //On deletion, the display info is updated to exclude the part
-  //Build part's check box is also toggled off
-  onBuildPartDelete(){
+  // On deletion, the display info is updated to exclude the part
+  // Build part's check box is also toggled off
+  onBuildPartDelete() {
     console.log(this.partSelection.selected);
-    if( this.partSelection.selected.length > 0){
-      for(let buildPart of this.partSelection.selected){
-        let buildName = buildPart['build']['name'];
-        let buildParts = this.buildData[buildName];
-        let partID = buildPart['part']['id'];
+    if (this.partSelection.selected.length > 0) {
+      for (const buildPart of this.partSelection.selected) {
+        const buildName = buildPart['build']['name'];
+        const buildParts = this.buildData[buildName];
+        const partID = buildPart['part']['id'];
 
         this.partSelection.toggle(buildPart);
-        this.buildData[buildName] = buildParts.filter(bp => bp.part.id != partID);
-        this.db._bps.deleteBuildParts(buildPart.buildID, buildPart.partID).subscribe(resp =>{
+        this.buildData[buildName] = buildParts.filter(bp => bp.part.id !== partID);
+        this.db._bps.deleteBuildParts(buildPart.buildID, buildPart.partID).subscribe(resp => {
           this.getOverallScore(buildName);
         });
       }
-      this.sb.openMsg("The selected build parts have been deleted!");
-    }
-    else{
-      this.sb.openMsg("No builds parts have been selected!")
+      this.sb.openMsg('The selected build parts have been deleted!');
+    } else {
+      this.sb.openMsg('No builds parts have been selected!')
     }
   }
 
@@ -119,9 +114,9 @@ export class ManageBuildsComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'}`;
   }
 
-  //Called from the template to get the build score
+  // Called from the template to get the build score
   getBuildScore(buildData: any){
-    let dictKey = buildData['key'];
+    const dictKey = buildData['key'];
     this.score = this.buildScores[dictKey];
   }
 }

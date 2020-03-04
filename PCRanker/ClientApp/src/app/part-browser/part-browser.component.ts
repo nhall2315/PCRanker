@@ -22,30 +22,28 @@ export class PartBrowserComponent implements OnInit {
   partTypes: PartType[];
   selectedBuild: Build;
   dataSource: MatTableDataSource<Part>;
-  displayedColumns: string[] = ["select","id", "partType","name", "rank", "benchmarkScore"]
+  displayedColumns: string[] = ['select', 'id', 'partType', 'name', 'rank', 'benchmarkScore'];
   selection = new SelectionModel<Part>(true, []);
   builds: Build[];
   label: string;
-  action: boolean = false;
-  
+  action: false;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private db: CrudService, private sb: SnackBarService) {}
-
   ngOnInit() {
     this.db._pts.getPartTypes().subscribe(types => this.partTypes = types);
-    this.db._bs.getBuilds().subscribe(builds => this.builds = builds);  
+    this.db._bs.getBuilds().subscribe(builds => this.builds = builds);
     this.setupPartData();
   }
 
-  //Gets part data and sets up table paginator, sort and filter
+  // Gets part data and sets up table paginator, sort and filter
   setupPartData() {
     this.db._ps.getParts().subscribe(parts => {
       this.dataSource = new MatTableDataSource(parts);
-      this.dataSource.filterPredicate = function(data, filter:string) {
-        return data.name.toLowerCase().includes(filter) 
+      this.dataSource.filterPredicate = (data, filter: string) => {
+        return data.name.toLowerCase().includes(filter)
         || data.partType.name.toLowerCase().includes(filter)
         || data.rank.toString().includes(filter);
       };
@@ -53,7 +51,7 @@ export class PartBrowserComponent implements OnInit {
       this.dataSource.sort = this.sort;
     });
   }
- 
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -63,27 +61,25 @@ export class PartBrowserComponent implements OnInit {
     }
   }
 
-  //Adds selected parts to selected build and checks if the part exists in the build
+  // Adds selected parts to selected build and checks if the part exists in the build
   onSubmit() {
-    if(this.selectedBuild && this.selection.selected){
-      for(let part of this.selection.selected){
-        let buildPart = {buildID: this.selectedBuild.id, partID: part.id};
+    if (this.selectedBuild && this.selection.selected) {
+      for (const part of this.selection.selected) {
+        const buildPart = {buildID: this.selectedBuild.id, partID: part.id};
 
         this.db._bps.getBuildParts(this.selectedBuild.id).subscribe(buildParts => {
-          let matchingParts = buildParts.filter(bp => bp.partID == part.id);
-          let matchingTypes = buildParts.filter(bp => bp.part.typeID == part.typeID);
+          const matchingParts = buildParts.filter(bp => bp.partID === part.id);
+          const matchingTypes = buildParts.filter(bp => bp.part.typeID === part.typeID);
 
-          if(matchingParts.length > 0 || matchingTypes.length > 0){
-            this.sb.openMsg("Each build must contain unique parts and part types!");
-          }
-          else {
+          if (matchingParts.length > 0 || matchingTypes.length > 0) {
+            this.sb.openMsg('Each build must contain unique parts and part types!');
+          } else {
             this.db._bps.addBuildPart(buildPart).subscribe();
             this.sb.openMsg(`Parts have been successfully added to ${this.selectedBuild.name}!`);
           }
         });
-
       }
     }
-    this.sb.openMsg("Please select a build or parts!");
+    this.sb.openMsg('Please select a build or parts!');
   }
 }
